@@ -1,12 +1,12 @@
 package cqrs.todo.domain;
 
-import static org.junit.Assert.*;
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import cqrs.todo.repository.TODOListRepository;
 import cqrs.todo.service.TODOListService;
 
@@ -25,10 +25,9 @@ public class ToDoListTest {
 		//When
 		todoListService.create("MyToDoList");
 		
-		//Then
+		//Then		
 		List<String> toDoList = todoListService.getToDoListTitles("MyToDoList");
-		assertNotNull(toDoList);
-		assertTrue(toDoList.contains("MyToDoList"));
+		assertThat(toDoList).isNotNull().isEmpty();
 	}
 	
 	@Test
@@ -41,8 +40,7 @@ public class ToDoListTest {
 		
 		//Then
 		List<String> toDoTitles = todoListService.getToDoTitles("MyToDoList");
-		assertNotNull(toDoTitles);
-		assertTrue(toDoTitles.contains("Start Ekito Presentation"));
+		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
 	}
 	
 	@Test
@@ -55,8 +53,7 @@ public class ToDoListTest {
 		
 		//Then
 		List<String> toDoTitles = todoListService.getToDoTitles("MyToDoList");
-		assertNotNull(toDoTitles);
-		assertTrue(toDoTitles.isEmpty());
+		assertThat(toDoTitles).isNotNull().isEmpty();;
 	}
 	
 	@Test
@@ -70,8 +67,7 @@ public class ToDoListTest {
 		
 		//Then
 		List<String> toDoTitles = todoListService.getStartedToDoTitles("MyToDoList");
-		assertNotNull(toDoTitles);
-		assertTrue(toDoTitles.contains("Start Ekito Presentation"));
+		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
 	}
 	
 	@Test
@@ -85,7 +81,6 @@ public class ToDoListTest {
 		
 		//Then
 		List<String> toDoTitles = todoListService.getCompletedToDoTitles("MyToDoList");
-		assertNotNull(toDoTitles);
-		assertTrue(toDoTitles.contains("Start Ekito Presentation"));
+		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
 	}
 }
