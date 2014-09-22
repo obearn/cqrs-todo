@@ -5,11 +5,11 @@ import java.util.List;
 import cqrs.todo.domain.ToDoList;
 import cqrs.todo.repository.TODOListRepository;
 
-public class TODOListService implements TOTOListCommandProcessor, ToDoListQueries {
+public class ToDoListService implements ToDoListCommandProcessor, ToDoListQueries {
 
 	private TODOListRepository repository;
 
-	public TODOListService(TODOListRepository repository) {
+	public ToDoListService(TODOListRepository repository) {
 		this.repository = repository;
 	}
 	

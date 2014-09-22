@@ -1,6 +1,6 @@
 package cqrs.todo.service;
 
-public interface TOTOListCommandProcessor {
+public interface ToDoListCommandProcessor {
 
 	public abstract void create(String name);
 

@@ -8,16 +8,16 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import cqrs.todo.repository.TODOListRepository;
-import cqrs.todo.service.TODOListService;
+import cqrs.todo.service.ToDoListService;
 
 public class ToDoListTest {
 
 	private TODOListRepository todoRepository = new TODOListRepository();
-	private TODOListService todoListService;
+	private ToDoListService todoListService;
 
 	@Before
 	public void setUp() {
-		todoListService = new TODOListService(todoRepository);
+		todoListService = new ToDoListService(todoRepository);
 	}
 	
 	@Test
