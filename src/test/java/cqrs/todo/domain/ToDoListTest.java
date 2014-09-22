@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import cqrs.todo.repository.TODOListRepository;
@@ -12,12 +13,15 @@ import cqrs.todo.service.TODOListService;
 public class ToDoListTest {
 
 	private TODOListRepository todoRepository = new TODOListRepository();
+	private TODOListService todoListService;
 
+	@Before
+	public void setUp() {
+		todoListService = new TODOListService(todoRepository);
+	}
+	
 	@Test
 	public void testCreateTodoList() {
-		//Given
-		TODOListService todoListService = new TODOListService(todoRepository);
-		
 		//When
 		todoListService.create("MyToDoList");
 		
@@ -30,7 +34,6 @@ public class ToDoListTest {
 	@Test
 	public void testAddToDo() {
 		//Given
-		TODOListService todoListService = new TODOListService(todoRepository);
 		todoListService.create("MyToDoList");
 		
 		//When
@@ -45,7 +48,6 @@ public class ToDoListTest {
 	@Test
 	public void testRemoveToDo() {
 		//Given
-		TODOListService todoListService = new TODOListService(todoRepository);
 		todoListService.create("MyToDoList");
 		
 		//When
@@ -60,7 +62,6 @@ public class ToDoListTest {
 	@Test
 	public void testStartToDo() {
 		//Given
-		TODOListService todoListService = new TODOListService(todoRepository);
 		todoListService.create("MyToDoList");
 		todoListService.addToDo("MyToDoList", "Start Ekito Presentation");
 				
@@ -72,5 +73,19 @@ public class ToDoListTest {
 		assertNotNull(toDoTitles);
 		assertTrue(toDoTitles.contains("Start Ekito Presentation"));
 	}
-
+	
+	@Test
+	public void testCompleteToDo() {
+		//Given
+		todoListService.create("MyToDoList");
+		todoListService.addToDo("MyToDoList", "Start Ekito Presentation");
+				
+		//When
+		todoListService.completeToDo("MyToDoList", "Start Ekito Presentation");
+		
+		//Then
+		List<String> toDoTitles = todoListService.getCompletedToDoTitles("MyToDoList");
+		assertNotNull(toDoTitles);
+		assertTrue(toDoTitles.contains("Start Ekito Presentation"));
+	}
 }

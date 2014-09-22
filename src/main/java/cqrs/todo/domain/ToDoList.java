@@ -18,6 +18,18 @@ public class ToDoList {
 		todos.put(todo, new ToDo(todo));
 	}
 
+	public void removeTodo(String todo) {
+		todos.remove(todo);
+	}
+	
+	public void startTodo(String todo) {
+		todos.get(todo).start();
+	}
+	
+	public void completeToDo(String todo) {
+		todos.get(todo).complete();
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -30,18 +42,21 @@ public class ToDoList {
 		return titles;
 	}
 
-	public void removeTodo(String todo) {
-		todos.remove(todo);
-	}
-
-	public void startTodo(String todo) {
-		todos.get(todo).start();
-	}
 
 	public List<String> getStartedTitles() {
 		List<String> titles = new LinkedList<String>();
 		for (ToDo todo : todos.values()) {
 			if (todo.isStarted()) {
+				titles.add(todo.getTitle());
+			}
+		}
+		return titles;
+	}
+
+	public List<String> getCompletedToDoTitles() {
+		List<String> titles = new LinkedList<String>();
+		for (ToDo todo : todos.values()) {
+			if (todo.isCompleted()) {
 				titles.add(todo.getTitle());
 			}
 		}

@@ -35,6 +35,11 @@ public class TODOListService {
 		todoList.startTodo(todo);
 		repository.save(todoList);
 	}
+
+	public void completeToDo(String todoListName, String todo) {
+		ToDoList todoList = repository.find(todoListName);
+		todoList.completeToDo(todo);
+	}
 	
 	public List<String> getToDoListTitles(String string) {
 		return Arrays.asList("MyToDoList");
@@ -49,4 +54,10 @@ public class TODOListService {
 		ToDoList todoList = repository.find(todoListName);
 		return todoList.getStartedTitles();
 	}
+
+	public List<String> getCompletedToDoTitles(String todoListName) {
+		ToDoList todoList = repository.find(todoListName);
+		return todoList.getCompletedToDoTitles();
+	}
+
 }
