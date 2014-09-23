@@ -34,15 +34,6 @@ public class ToDoList {
 		return name;
 	}
 
-	public List<String> getTitles() {
-		List<String> titles = new LinkedList<String>();
-		for (ToDo todo : todos.values()) {
-			titles.add(todo.getTitle());
-		}
-		return titles;
-	}
-
-
 	public List<String> getStartedTitles() {
 		List<String> titles = new LinkedList<String>();
 		for (ToDo todo : todos.values()) {

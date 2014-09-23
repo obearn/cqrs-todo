@@ -3,14 +3,21 @@ package cqrs.todo.service;
 import java.util.List;
 
 import cqrs.todo.domain.ToDoList;
+import cqrs.todo.events.ToDoAdded;
+import cqrs.todo.events.ToDoListCreated;
+import cqrs.todo.queries.ToDoListQueriesHandler;
 import cqrs.todo.repository.TODOListRepository;
 
 public class ToDoListService implements ToDoListCommandProcessor, ToDoListQueries {
 
 	private TODOListRepository repository;
+	private ToDoListQueriesHandler todoListTitlesHandler;
+	private ToDoQueryService queryService;
 
-	public ToDoListService(TODOListRepository repository) {
+	public ToDoListService(TODOListRepository repository, ToDoQueryService queryService, ToDoListQueriesHandler todoListTitlesHandler) {
 		this.repository = repository;
+		this.queryService = queryService;
+		this.todoListTitlesHandler = todoListTitlesHandler;
 	}
 	
 	/* (non-Javadoc)
@@ -19,6 +26,7 @@ public class ToDoListService implements ToDoListCommandProcessor, ToDoListQuerie
 	@Override
 	public void create(String name) {
 		repository.create(name);
+		this.todoListTitlesHandler.handle(new ToDoListCreated(name));
 	}
 
 	/* (non-Javadoc)
@@ -29,6 +37,7 @@ public class ToDoListService implements ToDoListCommandProcessor, ToDoListQuerie
 		ToDoList todoList = repository.find(todoListName);
 		todoList.add(todo);
 		repository.save(todoList);
+		this.todoListTitlesHandler.handle(new ToDoAdded(todoListName, todo));
 	}
 
 	/* (non-Javadoc)
@@ -59,23 +68,13 @@ public class ToDoListService implements ToDoListCommandProcessor, ToDoListQuerie
 		ToDoList todoList = repository.find(todoListName);
 		todoList.completeToDo(todo);
 	}
-	
-	/* (non-Javadoc)
-	 * @see cqrs.todo.service.ToDoListQueries#getToDoListTitles(java.lang.String)
-	 */
-	@Override
-	public List<String> getToDoListTitles(String todoListName) {
-		ToDoList todoList = this.repository.find(todoListName);
-		return todoList.getTitles();
-	}			
-	
+
 	/* (non-Javadoc)
 	 * @see cqrs.todo.service.ToDoListQueries#getToDoTitles(java.lang.String)
 	 */
 	@Override
 	public List<String> getToDoTitles(String todoListName) {
-		ToDoList todoList = repository.find(todoListName);
-		return todoList.getTitles();
+		return this.queryService.getToDoTitles(todoListName);
 	}
 	
 	/* (non-Javadoc)

@@ -7,17 +7,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import cqrs.todo.queries.ToDoListQueriesHandler;
+import cqrs.todo.repository.QueriesRepository;
 import cqrs.todo.repository.TODOListRepository;
 import cqrs.todo.service.ToDoListService;
+import cqrs.todo.service.ToDoQueryService;
 
 public class ToDoListTest {
 
 	private TODOListRepository todoRepository = new TODOListRepository();
 	private ToDoListService todoListService;
+	private ToDoQueryService todoQueryService;
 
 	@Before
 	public void setUp() {
-		todoListService = new ToDoListService(todoRepository);
+		QueriesRepository queriesRepository = new QueriesRepository();
+		todoQueryService = new ToDoQueryService(queriesRepository);
+		ToDoListQueriesHandler todoListTitlesHandler = new ToDoListQueriesHandler(queriesRepository);
+		todoListService = new ToDoListService(todoRepository, todoQueryService, todoListTitlesHandler);
 	}
 	
 	@Test
@@ -26,7 +33,7 @@ public class ToDoListTest {
 		todoListService.create("MyToDoList");
 		
 		//Then		
-		List<String> toDoList = todoListService.getToDoListTitles("MyToDoList");
+		List<String> toDoList = todoListService.getToDoTitles("MyToDoList");
 		assertThat(toDoList).isNotNull().isEmpty();
 	}
 	
