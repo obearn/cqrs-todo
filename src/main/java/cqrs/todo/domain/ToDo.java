@@ -4,7 +4,7 @@ public class ToDo {
 
 	private String title;
 	private boolean started = false;
-	private boolean completed;
+	private boolean completed = false;
 
 	public ToDo(String title) {
 		this.title = title;
@@ -21,13 +21,5 @@ public class ToDo {
 	public void complete() {
 		this.started = false;
 		this.completed = true;
-	}
-
-	public boolean isStarted() {
-		return started;
-	}
-
-	public boolean isCompleted() {
-		return completed;
 	}
 }

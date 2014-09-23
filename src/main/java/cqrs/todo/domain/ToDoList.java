@@ -1,8 +1,6 @@
 package cqrs.todo.domain;
 
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class ToDoList {
@@ -32,25 +30,5 @@ public class ToDoList {
 	
 	public String getName() {
 		return name;
-	}
-
-	public List<String> getStartedTitles() {
-		List<String> titles = new LinkedList<String>();
-		for (ToDo todo : todos.values()) {
-			if (todo.isStarted()) {
-				titles.add(todo.getTitle());
-			}
-		}
-		return titles;
-	}
-
-	public List<String> getCompletedToDoTitles() {
-		List<String> titles = new LinkedList<String>();
-		for (ToDo todo : todos.values()) {
-			if (todo.isCompleted()) {
-				titles.add(todo.getTitle());
-			}
-		}
-		return titles;
 	}
 }

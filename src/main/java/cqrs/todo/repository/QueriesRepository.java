@@ -16,4 +16,8 @@ public class QueriesRepository {
 	public ToDoListReadModel find(String name) {
 		return todoListReadModels.get(name);
 	}
+
+	public void save(ToDoListReadModel toDoListReadModel) {
+		todoListReadModels.put(toDoListReadModel.name, toDoListReadModel);
+	}
 }

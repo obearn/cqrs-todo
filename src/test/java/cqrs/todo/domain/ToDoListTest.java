@@ -24,7 +24,7 @@ public class ToDoListTest {
 		QueriesRepository queriesRepository = new QueriesRepository();
 		todoQueryService = new ToDoQueryService(queriesRepository);
 		ToDoListQueriesHandler todoListTitlesHandler = new ToDoListQueriesHandler(queriesRepository);
-		todoListService = new ToDoListService(todoRepository, todoQueryService, todoListTitlesHandler);
+		todoListService = new ToDoListService(todoRepository, todoListTitlesHandler);
 	}
 	
 	@Test
@@ -33,7 +33,7 @@ public class ToDoListTest {
 		todoListService.create("MyToDoList");
 		
 		//Then		
-		List<String> toDoList = todoListService.getToDoTitles("MyToDoList");
+		List<String> toDoList = todoQueryService.getToDoTitles("MyToDoList");
 		assertThat(toDoList).isNotNull().isEmpty();
 	}
 	
@@ -46,7 +46,7 @@ public class ToDoListTest {
 		todoListService.addToDo("MyToDoList", "Start Ekito Presentation");
 		
 		//Then
-		List<String> toDoTitles = todoListService.getToDoTitles("MyToDoList");
+		List<String> toDoTitles = todoQueryService.getToDoTitles("MyToDoList");
 		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
 	}
 	
@@ -59,7 +59,7 @@ public class ToDoListTest {
 		todoListService.removeToDo("MyToDoList", "Start Ekito Presentation");
 		
 		//Then
-		List<String> toDoTitles = todoListService.getToDoTitles("MyToDoList");
+		List<String> toDoTitles = todoQueryService.getToDoTitles("MyToDoList");
 		assertThat(toDoTitles).isNotNull().isEmpty();;
 	}
 	
@@ -73,7 +73,7 @@ public class ToDoListTest {
 		todoListService.startToDo("MyToDoList", "Start Ekito Presentation");
 		
 		//Then
-		List<String> toDoTitles = todoListService.getStartedToDoTitles("MyToDoList");
+		List<String> toDoTitles = todoQueryService.getStartedToDoTitles("MyToDoList");
 		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
 	}
 	
@@ -82,12 +82,15 @@ public class ToDoListTest {
 		//Given
 		todoListService.create("MyToDoList");
 		todoListService.addToDo("MyToDoList", "Start Ekito Presentation");
+		todoListService.startToDo("MyToDoList", "Start Ekito Presentation");
 				
 		//When
 		todoListService.completeToDo("MyToDoList", "Start Ekito Presentation");
 		
 		//Then
-		List<String> toDoTitles = todoListService.getCompletedToDoTitles("MyToDoList");
-		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
+		List<String> completedTodos = todoQueryService.getCompletedToDoTitles("MyToDoList");
+		assertThat(completedTodos).isNotNull().containsOnly("Start Ekito Presentation");
+		List<String> startedTodos = todoQueryService.getStartedToDoTitles("MyToDoList");
+		assertThat(startedTodos).isNotNull().isEmpty();
 	}
 }

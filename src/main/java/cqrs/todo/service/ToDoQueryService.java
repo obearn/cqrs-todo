@@ -13,9 +13,18 @@ public class ToDoQueryService {
 		queryRepository = queriesRepository;
 	}
 
-	public List<String> getToDoTitles(String name) {
-		ToDoListReadModel toDoListReadModel = this.queryRepository.find(name);
+	public List<String> getToDoTitles(String todoListName) {
+		ToDoListReadModel toDoListReadModel = this.queryRepository.find(todoListName);
 		return toDoListReadModel.getAllToDoTiles();
 	}
 
+	public List<String> getStartedToDoTitles(String todoListName) {
+		ToDoListReadModel toDoListReadModel = this.queryRepository.find(todoListName);
+		return toDoListReadModel.getStartedToDos();
+	}
+
+	public List<String> getCompletedToDoTitles(String todoListName) {
+		ToDoListReadModel toDoListReadModel = this.queryRepository.find(todoListName);
+		return toDoListReadModel.getCompletedToDos();
+	}
 }
