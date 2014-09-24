@@ -6,7 +6,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import cqrs.todo.domain.ToDoListService;
+import cqrs.todo.repository.ToDoListRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ToDoListTest {
@@ -15,7 +15,7 @@ public class ToDoListTest {
 
 	@Before
 	public void setUp() {
-		todoListService = new ToDoListService();
+		todoListService = new ToDoListService(new ToDoListRepository());
 	}
 	
 	@Test
@@ -38,6 +38,20 @@ public class ToDoListTest {
 		
 		//Then
 		List<String> toDoTitles = todoListService.getToDoTitles("MyToDoList");
+		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
+	}
+	
+	@Test
+	public void testStartedToDo() {
+		//Given
+		todoListService.create("MyToDoList");
+		todoListService.addToDo("MyToDoList", "Start Ekito Presentation");
+		
+		//When
+		todoListService.startToDo("MyToDoList", "Start Ekito Presentation");
+				
+		//Then
+		List<String> toDoTitles = todoListService.getStartedToDoTitles("MyToDoList");
 		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
 	}
 	
