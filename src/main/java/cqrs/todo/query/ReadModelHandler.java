@@ -2,6 +2,11 @@ package cqrs.todo.query;
 
 import java.util.List;
 
+import com.google.common.eventbus.Subscribe;
+
+import cqrs.todo.events.ToDoStartedEvent;
+import cqrs.todo.events.TodoAddedEvent;
+import cqrs.todo.events.TodoListCreatedEvent;
 import cqrs.todo.repository.ReadModelRepository;
 
 public class ReadModelHandler {
@@ -12,18 +17,17 @@ public class ReadModelHandler {
 		this.readModelRepository = readModelRepository;
 	}
 
-	public void handleTodoListCreated(String todoListName) {
-		this.readModelRepository.create(todoListName);
+	@Subscribe public void handleTodoListCreated(TodoListCreatedEvent parameterObject) {
+		this.readModelRepository.create(parameterObject.todoListName);
 	}
 
-	public void handleTodoAdded(String todoListName, String todoTitle) {
-		List<String> todoTitles = this.readModelRepository.findToDoTitles(todoListName);
-		todoTitles.add(todoTitle);
+	@Subscribe public void handleTodoAdded(TodoAddedEvent todoAddedEvent) {
+		List<String> todoTitles = this.readModelRepository.findToDoTitles(todoAddedEvent.todoListName);
+		todoTitles.add(todoAddedEvent.todoTitle);
 	}
 
-	public void handleTodoStarted(String todoListName, String todo) {
-		List<String> startedTodoTitles = this.readModelRepository.findStartedToDoTitles(todoListName);
-		startedTodoTitles.add(todo);
+	@Subscribe public void handleTodoStarted(ToDoStartedEvent todoStartedEvent) {
+		List<String> startedTodoTitles = this.readModelRepository.findStartedToDoTitles(todoStartedEvent.todoListName);
+		startedTodoTitles.add(todoStartedEvent.todo);
 	}
-
 }

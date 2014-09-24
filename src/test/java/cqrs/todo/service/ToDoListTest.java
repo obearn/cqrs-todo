@@ -6,6 +6,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.eventbus.EventBus;
+
 import cqrs.todo.query.ReadModelHandler;
 import cqrs.todo.repository.ReadModelRepository;
 import cqrs.todo.repository.ToDoListRepository;
@@ -15,13 +17,15 @@ public class ToDoListTest {
 
 	private ToDoListService todoListService;
 	private ToDoListQueries todoListQueries;
+	private EventBus eventBus = new EventBus();
 
 	@Before
 	public void setUp() {
 		ReadModelRepository readModelRepository = new ReadModelRepository();
 		ReadModelHandler readModelHandler = new ReadModelHandler(readModelRepository);
+		eventBus.register(readModelHandler);
 		todoListQueries = new ToDoListQueries(readModelRepository);
-		todoListService = new ToDoListService(new ToDoListRepository(), readModelHandler );
+		todoListService = new ToDoListService(new ToDoListRepository(), eventBus );
 	}
 	
 	@Test
@@ -60,5 +64,4 @@ public class ToDoListTest {
 		List<String> toDoTitles = todoListQueries.getStartedToDoTitles("MyToDoList");
 		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
 	}
-	
 }
