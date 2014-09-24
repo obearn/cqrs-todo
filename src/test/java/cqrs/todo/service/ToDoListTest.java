@@ -6,16 +6,22 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import cqrs.todo.query.ReadModelHandler;
+import cqrs.todo.repository.ReadModelRepository;
 import cqrs.todo.repository.ToDoListRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ToDoListTest {
 
 	private ToDoListService todoListService;
+	private ToDoListQueries todoListQueries;
 
 	@Before
 	public void setUp() {
-		todoListService = new ToDoListService(new ToDoListRepository());
+		ReadModelRepository readModelRepository = new ReadModelRepository();
+		ReadModelHandler readModelHandler = new ReadModelHandler(readModelRepository);
+		todoListQueries = new ToDoListQueries(readModelRepository);
+		todoListService = new ToDoListService(new ToDoListRepository(), readModelHandler );
 	}
 	
 	@Test
@@ -24,7 +30,7 @@ public class ToDoListTest {
 		todoListService.create("MyToDoList");
 		
 		//Then		
-		List<String> toDoList = todoListService.getToDoTitles("MyToDoList");
+		List<String> toDoList = todoListQueries.getToDoTitles("MyToDoList");
 		assertThat(toDoList).isNotNull().isEmpty();
 	}
 	
@@ -37,7 +43,7 @@ public class ToDoListTest {
 		todoListService.addToDo("MyToDoList", "Start Ekito Presentation");
 		
 		//Then
-		List<String> toDoTitles = todoListService.getToDoTitles("MyToDoList");
+		List<String> toDoTitles = todoListQueries.getToDoTitles("MyToDoList");
 		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
 	}
 	
@@ -51,7 +57,7 @@ public class ToDoListTest {
 		todoListService.startToDo("MyToDoList", "Start Ekito Presentation");
 				
 		//Then
-		List<String> toDoTitles = todoListService.getStartedToDoTitles("MyToDoList");
+		List<String> toDoTitles = todoListQueries.getStartedToDoTitles("MyToDoList");
 		assertThat(toDoTitles).isNotNull().containsOnly("Start Ekito Presentation");
 	}
 	

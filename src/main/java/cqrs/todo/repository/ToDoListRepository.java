@@ -9,11 +9,15 @@ public class ToDoListRepository {
 
 	private Map<String, ToDoList> todoLists = new LinkedHashMap<String, ToDoList>();
 
-	public void create(ToDoList toDoList2) {
-		todoLists.put(toDoList2.name, toDoList2);
+	public void create(ToDoList todoList) {
+		todoLists.put(todoList.name, todoList);
 	}
 
 	public ToDoList find(String todoListName) {
 		return todoLists.get(todoListName);
+	}
+
+	public void save(ToDoList todoList) {
+		todoLists.put(todoList.name, todoList);
 	}
 }
