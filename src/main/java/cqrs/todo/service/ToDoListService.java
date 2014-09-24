@@ -1,12 +1,12 @@
 package cqrs.todo.service;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 
 import cqrs.todo.domain.ToDoList;
 import cqrs.todo.events.ToDoStartedEvent;
 import cqrs.todo.events.TodoAddedEvent;
 import cqrs.todo.events.TodoListCreatedEvent;
-import cqrs.todo.query.ReadModelHandler;
 import cqrs.todo.repository.ToDoListRepository;
 
 public class ToDoListService {
@@ -19,23 +19,23 @@ public class ToDoListService {
 		this.eventBus = eventBus;
 	}
 
-	public void create(String todoListName) {
-		ToDoList todoList = new ToDoList(todoListName);
+	@Subscribe public void create(CreateTodoListCommand parameterObject) {
+		ToDoList todoList = new ToDoList(parameterObject.todoListName);
 		repository.create(todoList);
-		eventBus.post(new TodoListCreatedEvent(todoListName));
+		eventBus.post(new TodoListCreatedEvent(parameterObject.todoListName));
 	}
 
-	public void addToDo(String todoListName, String todo) {
-		ToDoList todoList = repository.find(todoListName);
-		todoList.addToDo(todo);
-		eventBus.post(new TodoAddedEvent(todoListName, todo));
+	@Subscribe public void addToDo(AddTodoCommand parameterObject) {
+		ToDoList todoList = repository.find(parameterObject.todoListName);
+		todoList.addToDo(parameterObject.todo);
+		eventBus.post(new TodoAddedEvent(parameterObject.todoListName, parameterObject.todo));
 		repository.save(todoList);
 	}
 
-	public void startToDo(String todoListName, String todo) {
-		ToDoList todoList = repository.find(todoListName);
-		todoList.startToDo(todo);
-		eventBus.post(new ToDoStartedEvent(todoListName, todo));
+	@Subscribe public void startToDo(StartTodoCommand parameterObject) {
+		ToDoList todoList = repository.find(parameterObject.todoListName);
+		todoList.startToDo(parameterObject.todo);
+		eventBus.post(new ToDoStartedEvent(parameterObject.todoListName, parameterObject.todo));
 		repository.save(todoList);
 	}
 }

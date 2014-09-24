@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.google.common.eventbus.EventBus;
 
+import cqrs.todo.infrastructure.LoggerEventHandler;
 import cqrs.todo.query.ReadModelHandler;
 import cqrs.todo.repository.ReadModelRepository;
 import cqrs.todo.repository.ToDoListRepository;
@@ -15,23 +16,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ToDoListTest {
 
-	private ToDoListService todoListService;
 	private ToDoListQueries todoListQueries;
 	private EventBus eventBus = new EventBus();
+	private EventBus commandBus = new EventBus();
 
 	@Before
 	public void setUp() {
 		ReadModelRepository readModelRepository = new ReadModelRepository();
 		ReadModelHandler readModelHandler = new ReadModelHandler(readModelRepository);
 		eventBus.register(readModelHandler);
+		LoggerEventHandler eventLoggerHandler = new LoggerEventHandler();
+		eventBus.register(eventLoggerHandler );
+		commandBus.register(new ToDoListService(new ToDoListRepository(), eventBus ));
 		todoListQueries = new ToDoListQueries(readModelRepository);
-		todoListService = new ToDoListService(new ToDoListRepository(), eventBus );
 	}
 	
 	@Test
 	public void testCreateTodoList() {
 		//When
-		todoListService.create("MyToDoList");
+		commandBus.post(new CreateTodoListCommand("MyToDoList"));
 		
 		//Then		
 		List<String> toDoList = todoListQueries.getToDoTitles("MyToDoList");
@@ -41,10 +44,10 @@ public class ToDoListTest {
 	@Test
 	public void testAddToDo() {
 		//Given
-		todoListService.create("MyToDoList");
+		commandBus.post(new CreateTodoListCommand("MyToDoList"));
 		
 		//When
-		todoListService.addToDo("MyToDoList", "Start Ekito Presentation");
+		commandBus.post(new AddTodoCommand("MyToDoList", "Start Ekito Presentation"));
 		
 		//Then
 		List<String> toDoTitles = todoListQueries.getToDoTitles("MyToDoList");
@@ -54,11 +57,11 @@ public class ToDoListTest {
 	@Test
 	public void testStartedToDo() {
 		//Given
-		todoListService.create("MyToDoList");
-		todoListService.addToDo("MyToDoList", "Start Ekito Presentation");
+		commandBus.post(new CreateTodoListCommand("MyToDoList"));
+		commandBus.post(new AddTodoCommand("MyToDoList", "Start Ekito Presentation"));
 		
 		//When
-		todoListService.startToDo("MyToDoList", "Start Ekito Presentation");
+		commandBus.post(new StartTodoCommand("MyToDoList", "Start Ekito Presentation"));
 				
 		//Then
 		List<String> toDoTitles = todoListQueries.getStartedToDoTitles("MyToDoList");

@@ -1,9 +1,8 @@
 package cqrs.todo.events;
 
-public class TodoListCreatedEvent {
-	public String todoListName;
 
+public class TodoListCreatedEvent extends ToDoListEvent {
 	public TodoListCreatedEvent(String todoListName) {
-		this.todoListName = todoListName;
+		super(todoListName);
 	}
 }

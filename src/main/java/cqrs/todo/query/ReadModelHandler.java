@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.eventbus.Subscribe;
 
-import cqrs.todo.events.ToDoStartedEvent;
+import cqrs.todo.events.ToDoEvent;
 import cqrs.todo.events.TodoAddedEvent;
 import cqrs.todo.events.TodoListCreatedEvent;
 import cqrs.todo.repository.ReadModelRepository;
@@ -23,10 +23,10 @@ public class ReadModelHandler {
 
 	@Subscribe public void handleTodoAdded(TodoAddedEvent todoAddedEvent) {
 		List<String> todoTitles = this.readModelRepository.findToDoTitles(todoAddedEvent.todoListName);
-		todoTitles.add(todoAddedEvent.todoTitle);
+		todoTitles.add(todoAddedEvent.todo);
 	}
 
-	@Subscribe public void handleTodoStarted(ToDoStartedEvent todoStartedEvent) {
+	@Subscribe public void handleTodoStarted(ToDoEvent todoStartedEvent) {
 		List<String> startedTodoTitles = this.readModelRepository.findStartedToDoTitles(todoStartedEvent.todoListName);
 		startedTodoTitles.add(todoStartedEvent.todo);
 	}
