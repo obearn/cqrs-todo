@@ -1,4 +1,4 @@
-package cqrs.todo.service;
+package cqrs.todo.commands;
 
 public class StartTodoCommand {
 	public String todoListName;

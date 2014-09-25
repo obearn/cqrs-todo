@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import com.google.common.eventbus.EventBus;
 
+import cqrs.todo.commands.AddTodoCommand;
+import cqrs.todo.commands.CreateTodoListCommand;
+import cqrs.todo.commands.StartTodoCommand;
 import cqrs.todo.infrastructure.LoggerEventHandler;
 import cqrs.todo.query.ReadModelHandler;
 import cqrs.todo.repository.ReadModelRepository;

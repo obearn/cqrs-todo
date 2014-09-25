@@ -3,6 +3,9 @@ package cqrs.todo.service;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
+import cqrs.todo.commands.AddTodoCommand;
+import cqrs.todo.commands.CreateTodoListCommand;
+import cqrs.todo.commands.StartTodoCommand;
 import cqrs.todo.domain.ToDoList;
 import cqrs.todo.events.ToDoStartedEvent;
 import cqrs.todo.events.TodoAddedEvent;
